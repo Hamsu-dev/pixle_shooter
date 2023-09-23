@@ -1,65 +1,79 @@
 [gd_scene load_steps=9 format=3 uid="uid://danxjce7q60xp"]
 
-[ext_resource type="Script" path="res://scenes/Player.gd" id="1_8r4xs"]
-[ext_resource type="Texture2D" uid="uid://cdlu3rv4prif8" path="res://assets/Character with pistol/idle/idle down1.png" id="2_khy1m"]
-[ext_resource type="Texture2D" uid="uid://dvm6mmblimeu0" path="res://assets/Character with pistol/attack/shoot down2.png" id="3_ytky6"]
-[ext_resource type="Texture2D" uid="uid://ex1o2ucf6yvy" path="res://assets/Character with pistol/attack/shoot down4.png" id="4_ckr7h"]
+[ext_resource type="Script" path="res://scripts/Player.gd" id="1_hun5g"]
+[ext_resource type="Texture2D" uid="uid://ienkwdg6tj0t" path="res://assets/knight_idle_spritesheet.png" id="2_ap2ee"]
+[ext_resource type="PackedScene" uid="uid://ducd8qlv6y8e" path="res://scenes/Spawner.tscn" id="5_358av"]
+[ext_resource type="Texture2D" uid="uid://wd7avgu0bxta" path="res://assets/basic_gun.png" id="6_6shep"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_kj0d0"]
-radius = 11.0
-height = 32.0
-
-[sub_resource type="Animation" id="Animation_i6i7s"]
-resource_name = "idle_down"
-length = 0.35
-loop_mode = 1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:texture")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 1,
-"values": [ExtResource("2_khy1m"), ExtResource("3_ytky6"), ExtResource("4_ckr7h"), ExtResource("4_ckr7h")]
-}
+radius = 16.0
+height = 80.0
 
 [sub_resource type="Animation" id="Animation_h4fvq"]
 length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/path = NodePath("Sprite2D:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [ExtResource("2_khy1m")]
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_5q4kr"]
+resource_name = "default"
+length = 0.6
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_nmo7i"]
 _data = {
 "RESET": SubResource("Animation_h4fvq"),
-"idle_down": SubResource("Animation_i6i7s")
+"default": SubResource("Animation_5q4kr")
 }
 
 [node name="Player" type="CharacterBody2D"]
-script = ExtResource("1_8r4xs")
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("1_hun5g")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(225, 185)
+position = Vector2(-0.200012, 0.799988)
 shape = SubResource("CapsuleShape2D_kj0d0")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-position = Vector2(225, 190)
+position = Vector2(7.62939e-06, 7.62939e-06)
 scale = Vector2(2.77, 2.77)
-texture = ExtResource("2_khy1m")
+texture = ExtResource("2_ap2ee")
+hframes = 6
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
 "": SubResource("AnimationLibrary_nmo7i")
 }
+
+[node name="Weapons" parent="." instance=ExtResource("5_358av")]
+light_mask = 4
+visibility_layer = 4
+scale = Vector2(0.6, 0.6)
+
+[node name="Sprite2D" type="Sprite2D" parent="Weapons"]
+texture = ExtResource("6_6shep")
+
+[node name="Marker2D" type="Marker2D" parent="Weapons/Sprite2D"]
+position = Vector2(34, 11)
