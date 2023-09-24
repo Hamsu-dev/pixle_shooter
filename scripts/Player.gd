@@ -4,7 +4,7 @@ extends CharacterBody2D
 @onready var sprite_2d = $Weapons/Sprite2D
 
 const speed = 200  # Adjust the speed as needed
-const gun_radius = 25 # Adjust the radius of the circular range
+const gun_radius = 30 # Adjust the radius of the circular range
 
 func _physics_process(_delta):
 	var movement_direction = Vector2.ZERO
@@ -21,7 +21,15 @@ func _physics_process(_delta):
 
 	movement_direction = movement_direction.normalized()
 	velocity = movement_direction * speed
-	move_and_slide()
+	
+	if velocity == Vector2.ZERO:
+		$AnimationTree.get("parameters/playback").travel("Idle")
+
+	else:
+		$AnimationTree.get("parameters/playback").travel("Walk")	
+		$AnimationTree.set('parameters/Idle/blend_position', movement_direction)
+		$AnimationTree.set('parameters/Walk/blend_position', movement_direction)
+		move_and_slide()
 
 func _input(event):
 	if event is InputEventMouseMotion:
